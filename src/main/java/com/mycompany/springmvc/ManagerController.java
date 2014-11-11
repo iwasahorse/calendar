@@ -22,7 +22,7 @@ public class ManagerController {
 	@RequestMapping(value = "/deleteUser", method = RequestMethod.GET)
 	public String delete(Locale locale, Model model, int id) {
 
-		model.addAttribute("deletedId");	//, id + ": deleted
+		model.addAttribute("deletedId" ,id);	//, id + ": deleted
 		
 		
 		return "deleteUserComplete";
