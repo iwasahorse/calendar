@@ -6,6 +6,8 @@ public class User {
 	String password;
 	String email;
 	Level level;
+	String profession;
+
 	int login;
 	int recommend;
 	
@@ -22,6 +24,15 @@ public class User {
 		this.level = level;
 		this.login = login;
 		this.recommend = recommend;
+	}
+	
+
+	public String getProfession() {
+		return profession;
+	}
+
+	public void setProfession(String profession) {
+		this.profession = profession;
 	}
 
 
