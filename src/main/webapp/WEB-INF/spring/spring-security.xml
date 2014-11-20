@@ -34,7 +34,7 @@
 		  users-by-username-query=
 		    "select id, password, true from users where id=?"
 		  authorities-by-username-query=
-		    "select u.id, ur.role from users u, user_roles ur where u.id = ? and ur.user_id = u.id " />
+		    "select u.id, ur.role from users u, user_roles ur where u.id = ? and ur.email= u.email " />
 	  </authentication-provider>
 	</authentication-manager>
 </beans:beans>
