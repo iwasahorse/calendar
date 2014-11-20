@@ -2,22 +2,31 @@ package com.mycompany.springmvc.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 
 import com.mycompany.springmvc.dao.UserDao;
 import com.mycompany.springmvc.domain.Level;
 import com.mycompany.springmvc.domain.User;
+import com.mycompany.springmvc.dao.UserRoleDao;
+import com.mycompany.springmvc.domain.UserRole;
 
 public class UserServiceImpl implements UserService {
 	public static final int MIN_LOGCOUNT_FOR_SILVER = 50;
 	public static final int MIN_RECCOMEND_FOR_GOLD = 30;
 
 	private UserDao userDao;
+	private UserRoleDao userRoleDao;
 	private MailSender mailSender;
 
 	public void setUserDao(UserDao userDao) {
 		this.userDao = userDao;
+	}
+	
+	@Autowired
+	public void setUserRoleDao(UserRoleDao userRoleDao) {
+		this.userRoleDao = userRoleDao;
 	}
 
 	public void setMailSender(MailSender mailSender) {
@@ -27,6 +36,8 @@ public class UserServiceImpl implements UserService {
 	public void add(User user) {
 		if (user.getLevel() == null) user.setLevel(Level.BASIC);
 		userDao.add(user);
+		UserRole userRole = new UserRole(user.getId(), "ROLE_USER");
+		this.userRoleDao.add(userRole);
 	}
 
 	public void upgradeLevels() {
@@ -58,8 +69,8 @@ public class UserServiceImpl implements UserService {
 		SimpleMailMessage mailMessage = new SimpleMailMessage();
 		mailMessage.setTo(user.getEmail());
 		mailMessage.setFrom("useradmin@ksug.org");
-		mailMessage.setSubject("Upgrade ¾È³»");
-		mailMessage.setText("»ç¿ëÀÚ´ÔÀÇ µî±ÞÀÌ " + user.getLevel().name());
+		mailMessage.setSubject("Upgrade ï¿½È³ï¿½");
+		mailMessage.setText("ï¿½ï¿½ï¿½ï¿½Ú´ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ " + user.getLevel().name());
 		
 		this.mailSender.send(mailMessage);
 	}

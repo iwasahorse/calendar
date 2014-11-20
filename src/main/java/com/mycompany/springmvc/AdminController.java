@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+//import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.mycompany.springmvc.domain.User;
 import com.mycompany.springmvc.service.UserService;
-import com.mycompany.springmvc.service.UserServiceImpl;
 
 @Controller
 @RequestMapping(value = "/admin")
+
 public class AdminController {
 	@Autowired
 	UserService userService;
