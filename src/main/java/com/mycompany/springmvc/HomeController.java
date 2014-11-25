@@ -12,14 +12,18 @@ import java.util.Locale;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.mycompany.springmvc.domain.Level;
-
 import com.mycompany.springmvc.domain.User;
 import com.mycompany.springmvc.service.UserService;
 
@@ -89,17 +93,13 @@ public class HomeController {
 	}
 
 	public void add() {
-		List<User> users = Arrays.asList(new User("bumjin", "π⁄π¸¡¯", "p1",
-				"user1@ksug.org", Level.BASIC, MIN_LOGCOUNT_FOR_SILVER - 1, 0), // 49,
-																				// 0
-				new User("joytouch", "∞≠∏Ìº∫", "p2", "user2@ksug.org",
-						Level.BASIC, MIN_LOGCOUNT_FOR_SILVER, 0), // 50, 0
-				new User("erwins", "Ω≈Ω¬«—", "p3", "user3@ksug.org", Level.SILVER,
-						60, MIN_RECCOMEND_FOR_GOLD - 1), // 60, 29
-				new User("madnite1", "¿ÃªÛ»£", "p4", "user4@ksug.org",
-						Level.SILVER, 60, MIN_RECCOMEND_FOR_GOLD), // 60, 30
-				new User("green", "ø¿πŒ±‘", "p5", "user5@ksug.org", Level.GOLD,
-						100, Integer.MAX_VALUE));
+		List<User> users = Arrays.asList(
+				new User("bumjin", 		"Î∞ïÎ≤îÏßÑ", "p1", "user1@ksug.org", Level.BASIC, MIN_LOGCOUNT_FOR_SILVER - 1, 0), //49, 0
+				new User("joytouch", 	"Í∞ïÎ™ÖÏÑ±", "p2", "user2@ksug.org", Level.BASIC, MIN_LOGCOUNT_FOR_SILVER, 0), //50, 0
+				new User("erwins", 		"Ïã†ÏäπÌïú", "p3", "user3@ksug.org", Level.SILVER, 60, MIN_RECCOMEND_FOR_GOLD - 1), //60, 29
+				new User("madnite1", 	"Ïù¥ÏÉÅÌò∏", "p4", "user4@ksug.org", Level.SILVER, 60, MIN_RECCOMEND_FOR_GOLD), //60, 30
+				new User("green", 		"Ïò§ÎØºÍ∑ú", "p5", "user5@ksug.org", Level.GOLD, 100, Integer.MAX_VALUE)
+			);
 
 		this.userService.add(users.get(0));
 		this.userService.add(users.get(1));
@@ -107,5 +107,55 @@ public class HomeController {
 		this.userService.add(users.get(3));
 		this.userService.add(users.get(4));
 	}
+	
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	public ModelAndView login(@RequestParam(value = "error", required = false) String error,
+			@RequestParam(value = "logout", required = false) String logout, 
+			  ModelAndView model ) {
+
+	  if (error != null) {
+		model.addObject("error", "Invalid username and password!");
+	  }
+ 
+	  if (logout != null) {
+		model.addObject("msg", "You've been logged out successfully.");
+	  }
+	  model.setViewName("login");
+ 
+	  return model;
+ 
+	}
+ 
+	//for 403 access denied page
+	@RequestMapping(value = "/403", method = RequestMethod.GET)
+	public ModelAndView accesssDenied(ModelAndView model) {
+	  //check if user is login
+	  Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	  
+	  if (!(auth instanceof AnonymousAuthenticationToken)) {
+		UserDetails userDetail = (UserDetails) auth.getPrincipal();	
+		model.addObject("username", userDetail.getUsername());
+	  }
+ 
+	  model.setViewName("403");
+	  return model;
+ 	}
+	
+	@RequestMapping(value = "/myinfo", method = RequestMethod.GET)
+	public ModelAndView myinfo(ModelAndView model) {
+	  //check if user is login
+	  Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	  
+	  if (!(auth instanceof AnonymousAuthenticationToken)) {
+		UserDetails userDetail = (UserDetails) auth.getPrincipal();
+		User user = this.userService.get(userDetail.getUsername());
+		model.addObject("user", user);
+	  }
+	  
+	  model.setViewName("myinfo");
+	  return model;
+ 	}
+	
+	
 
 }

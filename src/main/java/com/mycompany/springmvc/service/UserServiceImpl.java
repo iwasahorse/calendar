@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
 	
 	public void add(User user) {
 		if (user.getLevel() == null) user.setLevel(Level.BASIC);
-		userDao.add(user);
+		this.userDao.add(user);
 		UserRole userRole = new UserRole(user.getId(), "ROLE_USER");
 		this.userRoleDao.add(userRole);
 	}
