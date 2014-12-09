@@ -41,19 +41,12 @@ public class HomeController {
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
+
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String home(Locale locale, Model model) {
-		logger.info("Welcome home! The client locale is {}.", locale);
-
-		Date date = new Date();
-		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG,
-				DateFormat.LONG, locale);
-
-		String formattedDate = dateFormat.format(date);
-
-		model.addAttribute("serverTime", formattedDate);
-
-		return "home";
+	public ModelAndView index(Locale locale, ModelAndView mav) {
+		mav.addObject("message", "myCalendar 서비스에 오신 것을 환영합니다. 뻥입니다.");
+		mav.setViewName("index");
+		return mav;
 	}
 
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
@@ -79,7 +72,7 @@ public class HomeController {
 
 		return "userInfo";
 	}
-	
+
 	@RequestMapping(value = "/getAll", method = RequestMethod.GET)
 	public String getAll(Locale locale, Model model) {
 		this.userService.deleteAll();
@@ -93,13 +86,17 @@ public class HomeController {
 	}
 
 	public void add() {
-		List<User> users = Arrays.asList(
-				new User("bumjin", 		"박범진", "p1", "user1@ksug.org", Level.BASIC, MIN_LOGCOUNT_FOR_SILVER - 1, 0), //49, 0
-				new User("joytouch", 	"강명성", "p2", "user2@ksug.org", Level.BASIC, MIN_LOGCOUNT_FOR_SILVER, 0), //50, 0
-				new User("erwins", 		"신승한", "p3", "user3@ksug.org", Level.SILVER, 60, MIN_RECCOMEND_FOR_GOLD - 1), //60, 29
-				new User("madnite1", 	"이상호", "p4", "user4@ksug.org", Level.SILVER, 60, MIN_RECCOMEND_FOR_GOLD), //60, 30
-				new User("green", 		"오민규", "p5", "user5@ksug.org", Level.GOLD, 100, Integer.MAX_VALUE)
-			);
+		List<User> users = Arrays.asList(new User("bumjin", "박범진", "p1",
+				"user1@ksug.org", Level.BASIC, MIN_LOGCOUNT_FOR_SILVER - 1, 0), // 49,
+																				// 0
+				new User("joytouch", "강명성", "p2", "user2@ksug.org",
+						Level.BASIC, MIN_LOGCOUNT_FOR_SILVER, 0), // 50, 0
+				new User("erwins", "신승한", "p3", "user3@ksug.org", Level.SILVER,
+						60, MIN_RECCOMEND_FOR_GOLD - 1), // 60, 29
+				new User("madnite1", "이상호", "p4", "user4@ksug.org",
+						Level.SILVER, 60, MIN_RECCOMEND_FOR_GOLD), // 60, 30
+				new User("green", "오민규", "p5", "user5@ksug.org", Level.GOLD,
+						100, Integer.MAX_VALUE));
 
 		this.userService.add(users.get(0));
 		this.userService.add(users.get(1));
@@ -107,55 +104,56 @@ public class HomeController {
 		this.userService.add(users.get(3));
 		this.userService.add(users.get(4));
 	}
-	
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public ModelAndView login(@RequestParam(value = "error", required = false) String error,
-			@RequestParam(value = "logout", required = false) String logout, 
-			  ModelAndView model ) {
 
-	  if (error != null) {
-		model.addObject("error", "Invalid username and password!");
-	  }
- 
-	  if (logout != null) {
-		model.addObject("msg", "You've been logged out successfully.");
-	  }
-	  model.setViewName("login");
- 
-	  return model;
- 
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	public ModelAndView login(
+			@RequestParam(value = "error", required = false) String error,
+			@RequestParam(value = "logout", required = false) String logout,
+			ModelAndView model) {
+
+		if (error != null) {
+			model.addObject("error", "Invalid username and password!");
+		}
+
+		if (logout != null) {
+			model.addObject("msg", "You've been logged out successfully.");
+		}
+		model.setViewName("login");
+
+		return model;
+
 	}
- 
-	//for 403 access denied page
+
+	// for 403 access denied page
 	@RequestMapping(value = "/403", method = RequestMethod.GET)
 	public ModelAndView accesssDenied(ModelAndView model) {
-	  //check if user is login
-	  Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-	  
-	  if (!(auth instanceof AnonymousAuthenticationToken)) {
-		UserDetails userDetail = (UserDetails) auth.getPrincipal();	
-		model.addObject("username", userDetail.getUsername());
-	  }
- 
-	  model.setViewName("403");
-	  return model;
- 	}
-	
+		// check if user is login
+		Authentication auth = SecurityContextHolder.getContext()
+				.getAuthentication();
+
+		if (!(auth instanceof AnonymousAuthenticationToken)) {
+			UserDetails userDetail = (UserDetails) auth.getPrincipal();
+			model.addObject("username", userDetail.getUsername());
+		}
+
+		model.setViewName("403");
+		return model;
+	}
+
 	@RequestMapping(value = "/myinfo", method = RequestMethod.GET)
 	public ModelAndView myinfo(ModelAndView model) {
-	  //check if user is login
-	  Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-	  
-	  if (!(auth instanceof AnonymousAuthenticationToken)) {
-		UserDetails userDetail = (UserDetails) auth.getPrincipal();
-		User user = this.userService.get(userDetail.getUsername());
-		model.addObject("user", user);
-	  }
-	  
-	  model.setViewName("myinfo");
-	  return model;
- 	}
-	
-	
+		// check if user is login
+		Authentication auth = SecurityContextHolder.getContext()
+				.getAuthentication();
+
+		if (!(auth instanceof AnonymousAuthenticationToken)) {
+			UserDetails userDetail = (UserDetails) auth.getPrincipal();
+			User user = this.userService.get(userDetail.getUsername());
+			model.addObject("user", user);
+		}
+
+		model.setViewName("myinfo");
+		return model;
+	}
 
 }
