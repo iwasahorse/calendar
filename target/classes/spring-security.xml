@@ -15,13 +15,13 @@
 		<access-denied-handler error-page="/403" />
  
 		<form-login 
-		    login-page="/login" 
-		    default-target-url="/" 
-			authentication-failure-url="/login?error" 
+		    login-page="/users/signin" 
+		    default-target-url="/users/" 
+			authentication-failure-url="/users/signin?error" 
 			username-parameter="id"
 			password-parameter="password" />
 			
-		<logout logout-success-url="/login?logout"  />
+		<logout logout-success-url="/users/signin?logout"  />
 		
 		<!-- enable csrf protection -->
 	</http>

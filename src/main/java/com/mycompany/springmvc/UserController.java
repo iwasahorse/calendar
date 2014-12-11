@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -21,10 +22,18 @@ public class UserController {
 	 * Simply selects the home view to render by returning its name.
 	 */
 	@RequestMapping(value = "/signin", method = RequestMethod.GET)
-	public ModelAndView index(Locale locale, ModelAndView mav) {
-		mav.addObject("message", "myCalendar 서비스에 오신 것을 환영합니다. 뻥입니다.");
-		mav.setViewName("/users/signin");
-		return mav;
+	public ModelAndView signin(@RequestParam(value = "error", required = false) String error, @RequestParam(value = "logout", required = false) String logout) {
+		  ModelAndView model = new ModelAndView();
+		  if (error != null) {
+			model.addObject("error", "Invalid username and password!");
+		  }
+	 
+		  if (logout != null) {
+			model.addObject("msg", "You've been logged out successfully.");
+		  }
+		  model.setViewName("users/signin");
+	 
+		  return model;
 	}
 	
 }

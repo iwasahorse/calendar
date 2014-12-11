@@ -12,8 +12,7 @@
 <head>
 <title>Login Page</title>
 <!-- Bootstrap core CSS -->
-<link href="http://getbootstrap.com/bootstrap.min.css" rel="stylesheet">
-
+<link href="${resourceUrl}/springmvc/resources/bootstrap-3.3.1/css/bootstrap.css" rel="stylesheet"/>
 <!-- Custom styles for this template -->
 <link href="http://getbootstrap.com/examples/signin/signin.css" rel="stylesheet">
 
@@ -30,27 +29,41 @@
 </head>
 <body>
 
-    <div class="container">
 
-      <form class="form-signin" role="form">
-        <h2 class="form-signin-heading">Please sign in</h2>
-        <label for="inputEmail" class="sr-only">Email address</label>
-        <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
-        <label for="inputPassword" class="sr-only">Password</label>
-        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
-        <div class="checkbox">
-          <label>
-            <input type="checkbox" value="remember-me"> Remember me
-          </label>
-        </div>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-      </form>
-
-    </div> <!-- /container -->
+	<div id="login-box">
+ 
+		<h3>Login with Username and Password</h3>
+ 
+		<c:if test="${not empty error}">
+			<div class="error">${error}</div>
+		</c:if>
+		<c:if test="${not empty msg}">
+			<div class="msg">${msg}</div>
+		</c:if>
+ 
+ 	
+		<form name='loginForm' action="<c:url value='/j_spring_security_check' />" method='POST'>
+ 
+		<table>
+			<tr>
+				<td>User:</td>
+				<td><input type='text' name='id'></td>
+			</tr>
+			<tr>
+				<td>Password:</td>
+				<td><input type='password' name='password' /></td>
+			</tr>
+			<tr>
+				<td colspan='2'><input name="submit" type="submit" value="submit" /></td>
+			</tr>
+		  </table> 
+		</form>
+	</div>
 
 
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+    <script src="http://getbootstrap.com//assets/js/ie10-viewport-bug-workaround.js"></script>
   </body>
 
 </html>
+
