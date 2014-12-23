@@ -1,24 +1,33 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page language="java" contentType="text/html; charset=utf-8"
+	pageEncoding="utf-8"%>
 <%@page session="true"%>
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="http://getbootstrap.com/favicon.ico">
+<html>
 <head>
-<title>Login Page</title>
+<!--  meta charset="utf-8" -->
+<!-- 
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="author" content="">
+<link rel="icon" href="http://getbootstrap.com/favicon.ico">
+-->
+<head>
+<title>Sign-in Page</title>
 <!-- Bootstrap core CSS -->
-<link href="${resourceUrl}/springmvc/resources/bootstrap-3.3.1/css/bootstrap.css" rel="stylesheet"/>
+<c:url var="resourceUrl" value="/resources"/>
+<link
+	href="${resourceUrl}/bootstrap-3.3.1/css/bootstrap.css"
+	rel="stylesheet" />
 <!-- Custom styles for this template -->
-<link href="http://getbootstrap.com/examples/signin/signin.css" rel="stylesheet">
+<link href="${resourceUrl}/css/signin.css"
+	rel="stylesheet">
 
 <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
 <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-<script src="http://getbootstrap.com/assets/js/ie-emulation-modes-warning.js"></script>
+<script
+	src="http://getbootstrap.com/assets/js/ie-emulation-modes-warning.js"></script>
 
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 <!--[if lt IE 9]>
@@ -27,43 +36,41 @@
     <![endif]-->
 
 </head>
+
 <body>
 
+	<div class="container">
 
-	<div id="login-box">
- 
-		<h3>Login with Username and Password</h3>
- 
 		<c:if test="${not empty error}">
 			<div class="error">${error}</div>
 		</c:if>
 		<c:if test="${not empty msg}">
 			<div class="msg">${msg}</div>
 		</c:if>
- 
- 	
-		<form name='loginForm' action="<c:url value='/j_spring_security_check' />" method='POST'>
- 
-		<table>
-			<tr>
-				<td>User:</td>
-				<td><input type='text' name='id'></td>
-			</tr>
-			<tr>
-				<td>Password:</td>
-				<td><input type='password' name='password' /></td>
-			</tr>
-			<tr>
-				<td colspan='2'><input name="submit" type="submit" value="submit" /></td>
-			</tr>
-		  </table> 
+
+	<form class="form-signin" role="form" action="<c:url value='/j_spring_security_check' />" method='POST'>
+			<h2 class="form-signin-heading"></h2>
+			<label for="email" class="sr-only">input E-mail</label> <input
+				type="email" name="email" class="form-control" placeholder="E-mail"
+				required autofocus> <label for="inputPassword"
+				class="sr-only">Password</label> <input type="password"
+				name="password" class="form-control" placeholder="Password"
+				required>
+			<div class="checkbox">
+			</div>
+			<button class="btn btn-lg btn-primary btn-block" type="submit" value="submit">
+				로그인</button>
 		</form>
+
 	</div>
+	<!-- /container -->
 
 
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="http://getbootstrap.com//assets/js/ie10-viewport-bug-workaround.js"></script>
-  </body>
+
+	<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+	<script
+		src="http://getbootstrap.com/assets/js/ie10-viewport-bug-workaround.js"></script>
+</body>
 
 </html>
 

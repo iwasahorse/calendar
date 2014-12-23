@@ -20,7 +20,7 @@
 		class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
 		<property name="driverClass" value="com.mysql.jdbc.Driver" />
 		<property name="url"
-			value="jdbc:mysql://localhost/springbook?characterEncoding=UTF-8" />
+			value="jdbc:mysql://localhost/calendar?characterEncoding=UTF-8" />
 		<property name="username" value="spring" />
 		<property name="password" value="book" />
 	</bean>
@@ -30,21 +30,30 @@
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 
-	<bean id="userDao" class="com.mycompany.springmvc.dao.UserDaoJdbc">
+	<bean id="userDao" class="com.mycompany.springmvc.dao.JdbcCalendarUserDao">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 
-	<bean id="userService" class="com.mycompany.springmvc.service.UserServiceImpl">
-		<property name="userDao" ref="userDao" />
-		<property name="mailSender" ref="mailSender" />
-		<property name="userRoleDao" ref="userRoleDao" />
+	<bean id="eventDao" class="com.mycompany.springmvc.dao.JdbcEventDao">
+		<property name="dataSource" ref="dataSource" />
 	</bean>
 
-	<bean id="mailSender" class="com.mycompany.springmvc.service.DummyMailSender" />
+	<bean id="eventAttendeeDao" class="com.mycompany.springmvc.dao.JdbcEventAttendeeDao">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
 
 	<bean id="userRoleDao" class="com.mycompany.springmvc.dao.UserRoleDaoJdbc">
 		<property name="dataSource" ref="dataSource"></property>
 	</bean>
+
+	<bean id="calendarService" class="com.mycompany.springmvc.service.DefaultCalendarService">
+		<property name="userDao" ref="userDao" />
+		<property name="eventDao" ref="eventDao" />
+		<property name="userRoleDao" ref="userRoleDao" />
+		<property name="eventAttendeeDao" ref="eventAttendeeDao" />
+	</bean>
+
+
 
 
 </beans>

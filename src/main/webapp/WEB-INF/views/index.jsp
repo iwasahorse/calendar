@@ -18,7 +18,7 @@
 <div class="container">
 <jsp:include page="./includes/header.jsp"/>
     <c:if test="${message != null}">
-        <div class="alert alert-danger" id="message"><c:out value="${message}"/></div>
+        <div class="alert alert-success" id="message"><c:out value="${message}"/></div>
     </c:if>
 	<ul>
 	    <li><a id="eventsLink" href="events/">모든 이벤트 보기</a> - 모든 유저들이 등록한 이벤트를 볼 수 있습니다.

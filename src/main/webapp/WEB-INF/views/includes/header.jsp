@@ -30,8 +30,15 @@
             <c:url var="signupUrl" value="/users/signup" />
             <li><a id="signupLink" href="${signupUrl}"><span class="glyphicon glyphicon-globe"></span> 회원 가입</a></li>
             
+            <sec:authorize access="hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')">
+            <c:url var="signoutUrl" value="/j_spring_security_logout" />
+            <li><a id="signoutLink" href="${signoutUrl}"><span class="glyphicon glyphicon-saved"></span> 로그아웃</a></li>
+			</sec:authorize>
+            
+            <sec:authorize ifAnyGranted="ROLE_ANONYMOUS">
             <c:url var="signinUrl" value="/users/signin" />
             <li><a id="signinLink" href="${signinUrl}"><span class="glyphicon glyphicon-saved"></span> 로그인</a></li>
+			</sec:authorize>
         </ul>
     </div>
   </div>

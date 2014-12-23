@@ -1,16 +1,8 @@
 package com.mycompany.springmvc;
 
-import static com.mycompany.springmvc.service.UserServiceImpl.MIN_LOGCOUNT_FOR_SILVER;
-import static com.mycompany.springmvc.service.UserServiceImpl.MIN_RECCOMEND_FOR_GOLD;
-
-import java.text.DateFormat;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,9 +15,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.mycompany.springmvc.domain.Level;
-import com.mycompany.springmvc.domain.User;
-import com.mycompany.springmvc.service.UserService;
+import com.mycompany.springmvc.domain.CalendarUser;
+import com.mycompany.springmvc.service.CalendarService;
 
 /**
  * Handles requests for the application home page.
@@ -33,10 +24,8 @@ import com.mycompany.springmvc.service.UserService;
 @Controller
 public class HomeController {
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(HomeController.class);
 	@Autowired
-	UserService userService;
+	CalendarService userService;
 
 	/**
 	 * Simply selects the home view to render by returning its name.
@@ -44,7 +33,7 @@ public class HomeController {
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public ModelAndView index(Locale locale, ModelAndView mav) {
-		mav.addObject("message", "myCalendar 서비스에 오신 것을 환영합니다. 뻥입니다.");
+		mav.addObject("message", "myCalendar 서비스에 오신 것을 환영합니다.");
 		mav.setViewName("index");
 		return mav;
 	}
@@ -63,10 +52,10 @@ public class HomeController {
 	@RequestMapping(value = "/get", method = RequestMethod.GET)
 	public String get(Locale locale, Model model,
 			@RequestParam(value = "id") String id) {
-		this.userService.deleteAll();
-		this.add();
+		this.userService.deleteAllUsers();
+		
 
-		User user = this.userService.get(id);
+		CalendarUser user = this.userService.getUserByEmail(id);
 
 		model.addAttribute("user", user);
 
@@ -75,35 +64,16 @@ public class HomeController {
 
 	@RequestMapping(value = "/getAll", method = RequestMethod.GET)
 	public String getAll(Locale locale, Model model) {
-		this.userService.deleteAll();
-		this.add();
+		this.userService.deleteAllUsers();
+	
 
-		List<User> users = this.userService.getAll();
+		List<CalendarUser> users = this.userService.getUsersByEmail(null);
 
 		model.addAttribute("users", users);
 
 		return "usersInfo";
 	}
 
-	public void add() {
-		List<User> users = Arrays.asList(new User("bumjin", "박범진", "p1",
-				"user1@ksug.org", Level.BASIC, MIN_LOGCOUNT_FOR_SILVER - 1, 0), // 49,
-																				// 0
-				new User("joytouch", "강명성", "p2", "user2@ksug.org",
-						Level.BASIC, MIN_LOGCOUNT_FOR_SILVER, 0), // 50, 0
-				new User("erwins", "신승한", "p3", "user3@ksug.org", Level.SILVER,
-						60, MIN_RECCOMEND_FOR_GOLD - 1), // 60, 29
-				new User("madnite1", "이상호", "p4", "user4@ksug.org",
-						Level.SILVER, 60, MIN_RECCOMEND_FOR_GOLD), // 60, 30
-				new User("green", "오민규", "p5", "user5@ksug.org", Level.GOLD,
-						100, Integer.MAX_VALUE));
-
-		this.userService.add(users.get(0));
-		this.userService.add(users.get(1));
-		this.userService.add(users.get(2));
-		this.userService.add(users.get(3));
-		this.userService.add(users.get(4));
-	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public ModelAndView login(
@@ -148,7 +118,7 @@ public class HomeController {
 
 		if (!(auth instanceof AnonymousAuthenticationToken)) {
 			UserDetails userDetail = (UserDetails) auth.getPrincipal();
-			User user = this.userService.get(userDetail.getUsername());
+			CalendarUser user = this.userService.getUserByEmail(userDetail.getUsername());
 			model.addObject("user", user);
 		}
 
